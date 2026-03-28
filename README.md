@@ -23,7 +23,7 @@ A premium, interactive web dashboard that visualizes and compares pathfinding al
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-github-repo-link>
+   git clone https://github.com/NivedhaJD/Navixis
    cd ambulance-route-finder
    ```
 
