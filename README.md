@@ -48,12 +48,61 @@ Navixis models real-world emergency scenarios where **fast and efficient routing
 
 ---
 
-## 🚀 Run Locally
+## 🚀 How to Run the Project
+
+### 1️⃣ Clone the Repository
+
+Download the project to your system:
+
+```bash
+git clone https://github.com/NivedhaJD/Navixis
+cd Navixis
+```
+
+---
+
+### 2️⃣ Install Required Libraries
+
+Install all dependencies listed in the requirements file:
 
 ```bash
 pip install -r requirements.txt
+```
+
+---
+
+### 3️⃣ Run the Application
+
+Start the Flask server:
+
+```bash
 python app.py
 ```
 
-Open in browser:
+---
+
+### 4️⃣ Open in Browser
+
+After running the server, open your browser and go to:
+
+```
 http://127.0.0.1:5000
+```
+
+---
+
+### 5️⃣ Use the Application
+
+* Click to **set the ambulance (start point)**
+* Click to **set the hospital (destination)**
+* Drag to **add traffic/obstacles**
+* Select an algorithm (**A*, BFS, DFS**)
+* Click **Run** to visualize the pathfinding
+* Observe the **path and performance metrics**
+
+---
+
+## 📌 Conclusion
+
+Navixis demonstrates how AI search algorithms can be applied to **real-world emergency routing problems**, highlighting the importance of choosing the right algorithm for time-critical situations.
+
