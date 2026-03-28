@@ -47,4 +47,4 @@ A premium, interactive web dashboard that visualizes and compares pathfinding al
    ```
 
 5. **Open the Dashboard:**
-   Navigate your web browser to \`http://localhost:5000\`
+   Navigate your web browser to http://127.0.0.1:5000/
