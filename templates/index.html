@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NAVIXIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<!-- Ambient Glowing Orbs Background -->
+<div class="bg-fx bg-fx-1"></div>
+<div class="bg-fx bg-fx-2"></div>
+<div class="bg-fx bg-fx-3"></div>
+
+<!-- ── HEADER ─────────────────────────────────────────── -->
+<header class="hdr">
+  <div class="hdr-logo">
+    <i class="fa-solid fa-truck-medical hdr-icon"></i>
+    <div>
+      <div class="hdr-title">NAVIXIS</div>
+      <div class="hdr-sub">AI-Powered Emergency Route Optimization System</div>
+    </div>
+  </div>
+  <div class="hdr-status">
+    <span class="pulse-dot"></span>
+    <span id="status-text">SYSTEM READY</span>
+  </div>
+</header>
+
+<!-- ── MAIN LAYOUT ────────────────────────────────────── -->
+<main class="layout">
+
+  <!-- LEFT PANEL: controls -->
+  <aside class="panel panel-left">
+
+    <section class="card">
+      <h2 class="card-title"><i class="fa-solid fa-location-dot"></i> Placement Mode</h2>
+      <div class="btn-group-v">
+        <button class="tool-btn" id="btn-start" onclick="setMode('start')">
+          <i class="fa-solid fa-truck-medical tool-icon"></i> Set Ambulance
+        </button>
+        <button class="tool-btn" id="btn-end" onclick="setMode('end')">
+          <i class="fa-solid fa-house-medical tool-icon"></i> Set Hospital
+        </button>
+        <button class="tool-btn" id="btn-wall" onclick="setMode('wall')">
+          <i class="fa-solid fa-road-barrier tool-icon"></i> Add Traffic Block
+        </button>
+        <button class="tool-btn tool-btn--erase" id="btn-erase" onclick="setMode('erase')">
+          <i class="fa-solid fa-eraser tool-icon"></i> Erase
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><i class="fa-solid fa-microchip"></i> Algorithm</h2>
+      <div class="algo-selector">
+        <label class="algo-opt" id="opt-astar">
+          <input type="radio" name="algo" value="astar" checked/>
+          <div class="algo-label">
+            <span class="algo-badge badge-astar">A★</span>
+            <div>
+              <div class="algo-name">A* Search</div>
+              <div class="algo-desc">Optimal · Fastest</div>
+            </div>
+          </div>
+        </label>
+        <label class="algo-opt" id="opt-bfs">
+          <input type="radio" name="algo" value="bfs"/>
+          <div class="algo-label">
+            <span class="algo-badge badge-bfs">BFS</span>
+            <div>
+              <div class="algo-name">Breadth-First</div>
+              <div class="algo-desc">Optimal · Thorough</div>
+            </div>
+          </div>
+        </label>
+        <label class="algo-opt" id="opt-dfs">
+          <input type="radio" name="algo" value="dfs"/>
+          <div class="algo-label">
+            <span class="algo-badge badge-dfs">DFS</span>
+            <div>
+              <div class="algo-name">Depth-First</div>
+              <div class="algo-desc">Fast · Not Optimal</div>
+            </div>
+          </div>
+        </label>
+        <label class="algo-opt" id="opt-all">
+          <input type="radio" name="algo" value="all"/>
+          <div class="algo-label">
+            <span class="algo-badge badge-all">ALL</span>
+            <div>
+              <div class="algo-name">Compare All</div>
+              <div class="algo-desc">Run & Compare</div>
+            </div>
+          </div>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><i class="fa-solid fa-gauge-high"></i> Speed</h2>
+      <div class="speed-row">
+        <span class="speed-lbl">Slow</span>
+        <input type="range" id="speed-slider" min="1" max="5" value="3" class="slider"/>
+        <span class="speed-lbl">Fast</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><i class="fa-solid fa-gamepad"></i> Actions</h2>
+      <button class="action-btn action-btn--run" id="btn-run" onclick="runAlgorithm()">
+        <i class="fa-solid fa-play"></i> DISPATCH ROUTE
+      </button>
+      <button class="action-btn action-btn--clear" onclick="clearGrid()">
+        <i class="fa-solid fa-rotate-right"></i> Clear Grid
+      </button>
+      <button class="action-btn action-btn--reset" onclick="resetPath()">
+        <i class="fa-solid fa-ban"></i> Reset Path
+      </button>
+    </section>
+
+
+  </aside>
+
+  <!-- CENTER: grid -->
+  <div class="grid-wrapper">
+    <div class="grid-hud">
+      <span id="hud-mode">MODE: SELECT AMBULANCE</span>
+      <span id="hud-algo">ALGORITHM: A*</span>
+    </div>
+    <div class="grid-container" id="grid-container"></div>
+    <div class="grid-footer" id="grid-footer">
+      Click a cell to place · Click &amp; drag to draw traffic blocks
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL: metrics -->
+  <aside class="panel panel-right">
+
+    <section class="card">
+      <h2 class="card-title"><i class="fa-solid fa-chart-line"></i> Live Metrics</h2>
+      <div class="metrics-grid" id="metrics-live">
+        <div class="metric-box">
+          <div class="metric-val" id="m-explored">—</div>
+          <div class="metric-key">Nodes Explored</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val" id="m-path">—</div>
+          <div class="metric-key">Path Length</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val" id="m-time">—</div>
+          <div class="metric-key">Time (ms)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-val" id="m-status">—</div>
+          <div class="metric-key">Result</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="comparison-section" style="display:none">
+      <h2 class="card-title"><i class="fa-solid fa-bolt"></i> Algorithm Comparison</h2>
+      <table class="cmp-table" id="cmp-table">
+        <thead>
+          <tr>
+            <th>Algorithm</th>
+            <th>Path</th>
+            <th>Explored</th>
+            <th>Time (ms)</th>
+            <th>Optimal?</th>
+          </tr>
+        </thead>
+        <tbody id="cmp-tbody"></tbody>
+      </table>
+      <div class="verdict" id="verdict-box"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title"><i class="fa-solid fa-book"></i> Algorithm Info</h2>
+      <div class="info-tabs">
+        <button class="info-tab active" onclick="showInfo('astar',this)">A★</button>
+        <button class="info-tab" onclick="showInfo('bfs',this)">BFS</button>
+        <button class="info-tab" onclick="showInfo('dfs',this)">DFS</button>
+      </div>
+      <div id="info-content" class="info-body"></div>
+    </section>
+
+  </aside>
+</main>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
