@@ -3,26 +3,20 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>NAVIXIS</title>
+<title>NAVIXIS - Smart Ambulance Route Finder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 </head>
 <body>
 
-<!-- Ambient Glowing Orbs Background -->
-<div class="bg-fx bg-fx-1"></div>
-<div class="bg-fx bg-fx-2"></div>
-<div class="bg-fx bg-fx-3"></div>
-
 <!-- ── HEADER ─────────────────────────────────────────── -->
 <header class="hdr">
   <div class="hdr-logo">
-    <i class="fa-solid fa-truck-medical hdr-icon"></i>
+    <span class="hdr-icon">🚑</span>
     <div>
-      <div class="hdr-title">NAVIXIS</div>
-      <div class="hdr-sub">AI-Powered Emergency Route Optimization System</div>
+      <div class="hdr-title">NAVIXIS: SMART AMBULANCE</div>
+      <div class="hdr-sub">Emergency Route Intelligence System</div>
     </div>
   </div>
   <div class="hdr-status">
@@ -38,25 +32,25 @@
   <aside class="panel panel-left">
 
     <section class="card">
-      <h2 class="card-title"><i class="fa-solid fa-location-dot"></i> Placement Mode</h2>
+      <h2 class="card-title">📍 Placement Mode</h2>
       <div class="btn-group-v">
         <button class="tool-btn" id="btn-start" onclick="setMode('start')">
-          <i class="fa-solid fa-truck-medical tool-icon"></i> Set Ambulance
+          <span class="tool-icon">🚑</span> Set Ambulance
         </button>
         <button class="tool-btn" id="btn-end" onclick="setMode('end')">
-          <i class="fa-solid fa-house-medical tool-icon"></i> Set Hospital
+          <span class="tool-icon">🏥</span> Set Hospital
         </button>
         <button class="tool-btn" id="btn-wall" onclick="setMode('wall')">
-          <i class="fa-solid fa-road-barrier tool-icon"></i> Add Traffic Block
+          <span class="tool-icon">🚧</span> Add Traffic Block
         </button>
         <button class="tool-btn tool-btn--erase" id="btn-erase" onclick="setMode('erase')">
-          <i class="fa-solid fa-eraser tool-icon"></i> Erase
+          <span class="tool-icon">🧹</span> Erase
         </button>
       </div>
     </section>
 
     <section class="card">
-      <h2 class="card-title"><i class="fa-solid fa-microchip"></i> Algorithm</h2>
+      <h2 class="card-title">⚙️ Algorithm</h2>
       <div class="algo-selector">
         <label class="algo-opt" id="opt-astar">
           <input type="radio" name="algo" value="astar" checked/>
@@ -102,7 +96,7 @@
     </section>
 
     <section class="card">
-      <h2 class="card-title"><i class="fa-solid fa-gauge-high"></i> Speed</h2>
+      <h2 class="card-title">🎚️ Speed</h2>
       <div class="speed-row">
         <span class="speed-lbl">Slow</span>
         <input type="range" id="speed-slider" min="1" max="5" value="3" class="slider"/>
@@ -111,18 +105,29 @@
     </section>
 
     <section class="card">
-      <h2 class="card-title"><i class="fa-solid fa-gamepad"></i> Actions</h2>
+      <h2 class="card-title">🎮 Actions</h2>
       <button class="action-btn action-btn--run" id="btn-run" onclick="runAlgorithm()">
-        <i class="fa-solid fa-play"></i> DISPATCH ROUTE
+        ▶ DISPATCH ROUTE
       </button>
       <button class="action-btn action-btn--clear" onclick="clearGrid()">
-        <i class="fa-solid fa-rotate-right"></i> Clear Grid
+        ↺ Clear Grid
       </button>
       <button class="action-btn action-btn--reset" onclick="resetPath()">
-        <i class="fa-solid fa-ban"></i> Reset Path
+        ⊘ Reset Path
       </button>
     </section>
 
+    <section class="card card-legend">
+      <h2 class="card-title">🗺️ Legend</h2>
+      <div class="legend-grid">
+        <span class="leg-dot leg-start"></span><span>Ambulance</span>
+        <span class="leg-dot leg-end"></span><span>Hospital</span>
+        <span class="leg-dot leg-wall"></span><span>Traffic Block</span>
+        <span class="leg-dot leg-exp"></span><span>Explored</span>
+        <span class="leg-dot leg-path"></span><span>Final Path</span>
+        <span class="leg-dot leg-open"></span><span>Open Road</span>
+      </div>
+    </section>
 
   </aside>
 
@@ -142,7 +147,7 @@
   <aside class="panel panel-right">
 
     <section class="card">
-      <h2 class="card-title"><i class="fa-solid fa-chart-line"></i> Live Metrics</h2>
+      <h2 class="card-title">📊 Live Metrics</h2>
       <div class="metrics-grid" id="metrics-live">
         <div class="metric-box">
           <div class="metric-val" id="m-explored">—</div>
@@ -164,7 +169,7 @@
     </section>
 
     <section class="card" id="comparison-section" style="display:none">
-      <h2 class="card-title"><i class="fa-solid fa-bolt"></i> Algorithm Comparison</h2>
+      <h2 class="card-title">⚡ Algorithm Comparison</h2>
       <table class="cmp-table" id="cmp-table">
         <thead>
           <tr>
@@ -181,7 +186,7 @@
     </section>
 
     <section class="card">
-      <h2 class="card-title"><i class="fa-solid fa-book"></i> Algorithm Info</h2>
+      <h2 class="card-title">📚 Algorithm Info</h2>
       <div class="info-tabs">
         <button class="info-tab active" onclick="showInfo('astar',this)">A★</button>
         <button class="info-tab" onclick="showInfo('bfs',this)">BFS</button>

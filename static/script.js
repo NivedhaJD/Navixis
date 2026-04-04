@@ -67,16 +67,14 @@ function buildGrid() {
   const container = document.getElementById('grid-container');
   container.style.gridTemplateColumns = `repeat(${COLS}, 1fr)`;
 
-  // Calculate cell size to fit viewport (accounting for side panels)
-  const maxW = Math.floor((window.innerWidth - 680) / COLS);
-  const maxH = Math.floor((window.innerHeight - 180) / ROWS);
-  const cellSize = Math.max(6, Math.min(maxW, maxH, 24));
+  // Calculate cell size to fit viewport
+  const maxW = Math.floor((window.innerWidth - 520) / COLS);
+  const maxH = Math.floor((window.innerHeight - 130) / ROWS);
+  const cellSize = Math.max(14, Math.min(maxW, maxH, 26));
 
   container.innerHTML = '';
-  // Container width: (cols * cellSize) + ((cols - 1) * 2px gap) + 8px padding
-  container.style.width  = `${(COLS * cellSize) + ((COLS - 1) * 2) + 8}px`;
-  // Container height: (rows * cellSize) + ((rows - 1) * 2px gap) + 8px padding
-  container.style.height = `${(ROWS * cellSize) + ((ROWS - 1) * 2) + 8}px`;
+  container.style.width  = `${COLS * cellSize + COLS - 1}px`;
+  container.style.height = `${ROWS * cellSize + ROWS - 1}px`;
 
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
